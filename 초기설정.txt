@@ -1,0 +1,4 @@
+
+1. 파일들 전부 애러 뜰 때는... 
+	프로젝트에 우클릭하고, build path에서 configure build path로 들어가서, 
+	아파치 톰캣 9.0 add로 추가하고, JRE system liblary가 1.7이면 remove하고 jdk 1.8.0_231 로 다시 추가해주면 댐

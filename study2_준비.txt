@@ -1,0 +1,73 @@
+# Study2 준비
+
+
+----
+예외에 대한 생각처리
+Java 예외 
+ Exception (Checked Exception) : 개발자가 처리해야 하는 예외 (필수)  
+ RuntimeException (UnChecked Exception) :  개발자가 해당 예외의 상황에 따라 예외에 대해서 처리 가능 (옵션)
+
+SQLException 에 대해서 
+ JDBC API 에서 모든 메서드에 SQLException 을 던지도록 되어 있습니다.
+ 이로 인해 개발자는 JDBC를 사용 할 때 SQLException을 처리하거나 (try ~ catch ~) 
+ 또는 호출 메서드에 던져야 하는 상황을 강제합니다.(throws ~) 
+      
+예외는 어떤 식으로 구성하고 처리 해야 할까?
+ - 사용자가 예외에 대한 처리를 하기 어렵다면 RuntimeException 으로 구성 해라
+ 
+ - 예외는 추상적으로 만들지 않기 
+   : 예외를 처리하는 페이지에서 어떤 예외가 발생했는지 의미를 파악 할 수 있도록 하자
+
+ - 예외처를 못할것 같으면 그냥 던져라 
+
+ - 예외를 먹지마라 
+    } catch(SQLExcetpion e){  // catch 했으면서 아무것도 안함 
+     }
+
+ - 예외를 잡았으면(catch) 했으면 예외로그를 잘 처리해라 
+    } catch(SQLExcetpion e){ 
+       System.out.println("에러났지롱~~");  // X
+       System.out.println(e.getMessage() ); // 별로 
+       e.printStackTrace()  // 괜찮기는 한데..
+        // 예외로그를 하는 라이브러리를 활용해라... 
+     }
+   
+ - 서비스단에서 발생시킬 예외 
+ com.study.exception
+ BizException <- Exception (Checked Exception)  
+  <- BizNotEffectedException 
+  <- BizDuplicateKeyException 
+  <- BizNotFoundException 
+ 
+ - Dao 단에서 발생시킬 예외
+  DaoException <- RuntimeException (UnChecked Excption)
+  <- DaoSqlException 
+  <- DaoDuplicateKeyException 
+  
+-----------------------------------------------------------------
+DAO, Service 명명규칙 
+IMemberDao  <- MemberDaoOracle    
+ insertXxx
+ updateXxx
+ deleteXxx
+ getXxx     (or findByXxx , selectXxx) 
+ getXxxList (or findXxxAll , selectXxxList)
+ 
+IMemberService <- MemberSeriviceImpl 
+ : 서비스 구현체는 끝에 Impl 사용  
+  registXxx
+  modifyXxx
+  removeXxx
+  getXxx
+  getXxxList   
+ 
+ 
+---------------------------------
+ 전형적 어플리케이션 5계층 
+ - Controller Layer :
+ - Business/Logic Layer : 
+ - Persistence Layer : 
+ - Presentation Layer :  
+ - Domain Layer :
+
+
