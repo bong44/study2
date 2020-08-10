@@ -13,6 +13,7 @@ import com.study.exception.DaoException;
 import com.study.member.dao.IMemberDao;
 import com.study.member.dao.MemberDaoOracle;
 import com.study.member.vo.MemberVO;
+import com.sun.webkit.ThemeClient;
 
 public class MemberServiceImpl implements IMemberService {
 	
@@ -27,7 +28,22 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	public void modifyMember(MemberVO member) throws BizNotEffectedException, BizNotFoundException {
 		// TODO Auto-generated method stub
-
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			MemberVO vo = memberDao.getMember(conn, member.getMemId());
+			if (vo == null) {
+				throw new BizNotFoundException("["+member.getMemId()+"] 조회 실패");
+			}
+			int cnt = memberDao.updateMember(conn, member);
+			if (cnt < 1) {
+				throw new BizNotEffectedException("["+member.getMemId()+"] 수정 실패");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("조회시", e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
@@ -38,8 +54,19 @@ public class MemberServiceImpl implements IMemberService {
 
 	@Override
 	public MemberVO getMember(String memId) throws BizNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			MemberVO vo = memberDao.getMember(conn, memId);
+			if (vo == null) {
+				throw new BizNotFoundException("["+memId+"] 조회 실패");
+			}
+			return vo;
+		} catch (SQLException e) {
+			throw new DaoException("조회시", e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override

@@ -56,7 +56,7 @@
 				<td><a href="memberView.jsp?memId=${vo.memId}" >${vo.memName}</a></td>
 				<td>${vo.memHp}</td>
 				<td>${vo.memBir}</td>
-				<td>${vo.memJob}</td>
+				<td>${vo.memJobNm}</td>
 				<td>${vo.memMileage}</td>
 			</tr>
 		</c:forEach>

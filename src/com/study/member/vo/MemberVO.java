@@ -14,6 +14,10 @@ public class MemberVO {
 	private String memLike;        /* 취미 코드 */
 	private int memMileage;        /* 마일리지 */
 	private String memDelete;      /* 탈퇴여부 */
+
+	//추가된 필드
+	private String memJobNm;         /* 직업 코드 */
+	private String memLikeNm;        /* 취미 코드 */
 	
 	public String getMemId() {
 		return memId;
@@ -92,5 +96,17 @@ public class MemberVO {
 	}
 	public void setMemDelete(String memDelete) {
 		this.memDelete = memDelete;
+	}
+	public String getMemJobNm() {
+		return memJobNm;
+	}
+	public void setMemJobNm(String memJobNm) {
+		this.memJobNm = memJobNm;
+	}
+	public String getMemLikeNm() {
+		return memLikeNm;
+	}
+	public void setMemLikeNm(String memLikeNm) {
+		this.memLikeNm = memLikeNm;
 	}
 }
