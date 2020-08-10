@@ -9,6 +9,7 @@ import com.study.exception.BizDuplicateKeyException;
 import com.study.exception.BizException;
 import com.study.exception.BizNotEffectedException;
 import com.study.exception.BizNotFoundException;
+import com.study.exception.DaoDuplicateKeyException;
 import com.study.exception.DaoException;
 import com.study.member.dao.IMemberDao;
 import com.study.member.dao.MemberDaoOracle;
@@ -21,13 +22,23 @@ public class MemberServiceImpl implements IMemberService {
 
 	@Override
 	public void registMember(MemberVO member) throws BizDuplicateKeyException {
-		// TODO Auto-generated method stub
-
+			Connection conn = null;
+			try {
+				conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+				try {
+					memberDao.insertMember(conn, member);
+				} catch (DaoDuplicateKeyException e) {
+					throw new BizDuplicateKeyException(e.getMessage(),e);
+				}
+			} catch (SQLException e) {
+				throw new DaoException(e);
+			}finally {
+				if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+			}
 	}
 
 	@Override
 	public void modifyMember(MemberVO member) throws BizNotEffectedException, BizNotFoundException {
-		// TODO Auto-generated method stub
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");

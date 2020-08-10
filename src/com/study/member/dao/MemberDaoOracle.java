@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.study.exception.DaoDuplicateKeyException;
 import com.study.exception.DaoException;
 import com.study.member.vo.MemberVO;
 import com.sun.jndi.cosnaming.CNCtx;
@@ -15,8 +16,58 @@ public class MemberDaoOracle implements IMemberDao{
 
 	@Override
 	public int insertMember(Connection conn, MemberVO member) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		int i = 1;
+		
+		try {
+			sb.append("      INSERT INTO member (  								");
+			sb.append("	         mem_id											");
+			sb.append("	         , mem_pass 		");
+			sb.append("	         , mem_name		");
+			sb.append("	         , mem_bir		");
+			sb.append("	         , mem_zip		");
+			sb.append("	         , mem_add1   	");
+			sb.append("	         , mem_add2		");
+			sb.append("	         , mem_hp			");
+			sb.append("	         , mem_mail		");
+			sb.append("	         , mem_job		");
+			sb.append("	         , mem_like    	");
+			sb.append("	         , mem_mileage 	");
+			sb.append("	         , mem_delete	");
+			sb.append("	     ) VALUES (											");
+			sb.append("	         	?    ,  ?    , ?						");
+			sb.append("	         , ?   , ?     ,   ?					");
+			sb.append("	         , ?   , ?     ,   ?					");
+			sb.append("	         , ?   , ?      ,  0					");
+			sb.append("	         , null 	 										");
+			sb.append("	     )														");
+			System.out.println(sb.toString().replaceAll("\\s{2,}", " ")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			//bind 변수 설정(파라미터 변수)
+			pstmt.setString(i++, member.getMemId());
+			pstmt.setString(i++, member.getMemPass());
+			pstmt.setString(i++, member.getMemName());
+			pstmt.setString(i++, member.getMemBir());
+			pstmt.setString(i++, member.getMemZip());
+			pstmt.setString(i++, member.getMemAdd1());
+			pstmt.setString(i++, member.getMemAdd2());
+			pstmt.setString(i++, member.getMemHp());
+			pstmt.setString(i++, member.getMemMail());
+			pstmt.setString(i++, member.getMemJob());
+			pstmt.setString(i++, member.getMemLike());
+			int cnt = pstmt.executeUpdate();
+			return cnt;
+		} catch (SQLException e) {
+			if (e.getErrorCode() == 1) { //unique 애러일 경우 발생하는 코드 값
+				throw new DaoDuplicateKeyException("중복된 코드 발생 =["+ member.getMemId() + "]");
+			}
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(rs != null)try{rs.close();}catch(SQLException e){e.printStackTrace();}
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
