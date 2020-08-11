@@ -118,6 +118,7 @@ public class MemberDaoOracle implements IMemberDao{
 	@Override
 	public int deleteMember(Connection conn, MemberVO member) {
 		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 

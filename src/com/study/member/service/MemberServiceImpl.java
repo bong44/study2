@@ -60,7 +60,7 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	public void removeMember(MemberVO member) throws BizNotEffectedException, BizNotFoundException {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

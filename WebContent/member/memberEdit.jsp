@@ -1,3 +1,7 @@
+<%@page import="com.study.code.service.CommonCodeServiceImpl"%>
+<%@page import="com.study.code.vo.CodeVO"%>
+<%@page import="com.study.code.dao.CommonCodeDaoOracle"%>
+<%@page import="com.study.code.service.ICommonCodeService"%>
 <%@page import="com.study.member.service.IMemberService"%>
 <%@page import="com.study.exception.BizNotFoundException"%>
 <%@page import="com.study.member.vo.MemberVO"%>
@@ -26,6 +30,16 @@
  	}catch(BizNotFoundException ex){
  		request.setAttribute("ex", ex);
  	}
+ 	
+ 	
+ 	ICommonCodeService codeService = new CommonCodeServiceImpl();
+ 	List<CodeVO> jobList = codeService.getCodeListByParent("JB00");
+ 	List<CodeVO> hobList = codeService.getCodeListByParent("HB00");
+ 	request.setAttribute("jobList", jobList);
+ 	request.setAttribute("hobList", hobList);
+ 	
+ 	
+ 	
  	
  %>
 	<c:if test="${not empty ex}">
@@ -84,15 +98,9 @@
 				<td>
 					<select name="memJob" >
 						<option value="">-- 직업 선택 --</option>
-						<option value="JB01" ${"JB01" eq mem.memJob ? "selected='selected'":"" }>주부</option>
-						<option value="JB02" ${"JB02" eq mem.memJob ? "selected='selected'":"" }>은행원</option>
-						<option value="JB03" ${"JB03" eq mem.memJob ? "selected='selected'":"" }>공무원</option>
-						<option value="JB04" ${"JB04" eq mem.memJob ? "selected='selected'":"" }>축산업</option>
-						<option value="JB05" ${"JB05" eq mem.memJob ? "selected='selected'":"" }>회사원</option>
-						<option value="JB06" ${"JB06" eq mem.memJob ? "selected='selected'":"" }>농업</option>
-						<option value="JB07" ${"JB07" eq mem.memJob ? "selected='selected'":"" }>자영업</option>
-						<option value="JB08" ${"JB08" eq mem.memJob ? "selected='selected'":"" }>학생</option>
-						<option value="JB09" ${"JB09" eq mem.memJob ? "selected='selected'":"" }>교사</option>					
+						<c:forEach items="${jobList}" var="job">
+							<option value="${job.commCd}" ${job.commCd eq mem.memJob ? "selected='selected'":"" }>${job.commNm}</option>
+						</c:forEach>
 					</select>				
 				</td>
 			</tr>
@@ -101,21 +109,10 @@
 				<td>
 					<select name="memLike" >
 						<option value="">-- 취미 선택 --</option>
-						<option value="HB01" ${"HB01" eq mem.memLike ?"selected='selected'":""}>서예</option>
-						<option value="HB02" ${"HB02" eq mem.memLike ?"selected='selected'":""}>장기</option>
-						<option value="HB03" ${"HB03" eq mem.memLike ?"selected='selected'":""}>수영</option>
-						<option value="HB04" ${"HB04" eq mem.memLike ?"selected='selected'":""}>독서</option>
-						<option value="HB05" ${"HB05" eq mem.memLike ?"selected='selected'":""}>당구</option>
-						<option value="HB06" ${"HB06" eq mem.memLike ?"selected='selected'":""}>바둑</option>
-						<option value="HB07" ${"HB07" eq mem.memLike ?"selected='selected'":""}>볼링</option>
-						<option value="HB08" ${"HB08" eq mem.memLike ?"selected='selected'":""}>스키</option>
-						<option value="HB09" ${"HB09" eq mem.memLike ?"selected='selected'":""}>만화</option>
-						<option value="HB10" ${"HB010" eq mem.memLike ?"selected='selected'":""}>낚시</option>
-						<option value="HB11" ${"HB011" eq mem.memLike ?"selected='selected'":""}>영화감상</option>
-						<option value="HB12" ${"HB012" eq mem.memLike ?"selected='selected'":""}>등산</option>
-						<option value="HB13" ${"HB013" eq mem.memLike ?"selected='selected'":""}>개그</option>
-						<option value="HB14" ${"HB014" eq mem.memLike ?"selected='selected'":""}>카레이싱</option>					
-					</select>				
+						<c:forEach items="${hobList}" var="hob">
+							<option value="${hob.commCd}" ${hob.commCd eq mem.memLike ?"selected='selected'":""}>${hob.commNm}</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
 			<tr>

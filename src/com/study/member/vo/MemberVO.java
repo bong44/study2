@@ -1,6 +1,11 @@
 package com.study.member.vo;
 
-public class MemberVO {
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+@SuppressWarnings("serial")
+public class MemberVO implements Serializable{
 	private String memId;          /* 회원 아이디 */
 	private String memPass;        /* 회원 비밀번호 */
 	private String memName;        /* 회원 이름 */
@@ -108,5 +113,9 @@ public class MemberVO {
 	}
 	public void setMemLikeNm(String memLikeNm) {
 		this.memLikeNm = memLikeNm;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
 	}
 }

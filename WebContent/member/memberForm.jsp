@@ -1,5 +1,9 @@
+<%@page import="com.study.code.vo.CodeVO"%>
+<%@page import="com.study.code.service.CommonCodeServiceImpl"%>
+<%@page import="com.study.code.service.ICommonCodeService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <% request.setCharacterEncoding("utf-8"); %> 
 <!DOCTYPE html>
 <html lang="ko">
@@ -10,6 +14,13 @@
 <body>
 <%@ include file="/WEB-INF/inc/top.jsp" %>
  <div class="container">	
+ <%
+ 	ICommonCodeService codeService = new CommonCodeServiceImpl();
+ 	List<CodeVO> jobList = codeService.getCodeListByParent("JB00");
+ 	List<CodeVO> hobList = codeService.getCodeListByParent("HB00");
+ 	request.setAttribute("jobList", jobList);
+ 	request.setAttribute("hobList", hobList);
+ %>
 	<h3>회원가입</h3>		
 	<form action="memberRegist.jsp" method="get" >
 	<table class="table table-striped">
@@ -57,16 +68,10 @@
 				<th>직업</th>
 				<td>
 					<select name="memJob" required="required">
-						<option value="">-- 직업 선택 --</option>
-						<option value="JB01">주부</option>
-						<option value="JB02">은행원</option>
-						<option value="JB03">공무원</option>
-						<option value="JB04">축산업</option>
-						<option value="JB05">회사원</option>
-						<option value="JB06">농업</option>
-						<option value="JB07">자영업</option>
-						<option value="JB08">학생</option>
-						<option value="JB09">교사</option>					
+								<option value="">-- 직업 선택 --</option>
+						<c:forEach items="${jobList}" var="job">
+								<option value="${job.commCd}">${job.commNm}</option>
+						</c:forEach>
 					</select>				
 				</td>
 			</tr>
@@ -75,20 +80,9 @@
 				<td>
 					<select name="memLike" required="required">
 						<option value="">-- 취미 선택 --</option>
-						<option value="HB01">서예</option>
-						<option value="HB02">장기</option>
-						<option value="HB03">수영</option>
-						<option value="HB04">독서</option>
-						<option value="HB05">당구</option>
-						<option value="HB06">바둑</option>
-						<option value="HB07">볼링</option>
-						<option value="HB08">스키</option>
-						<option value="HB09">만화</option>
-						<option value="HB10">낚시</option>
-						<option value="HB11">영화감상</option>
-						<option value="HB12">등산</option>
-						<option value="HB13">개그</option>
-						<option value="HB14">카레이싱</option>					
+						<c:forEach items="${hobList}" var="hob">
+						<option value="${hob.commCd}">${hob.commNm}</option>
+						</c:forEach>				
 					</select>				
 				</td>
 			</tr>			
