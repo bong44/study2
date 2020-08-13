@@ -6,13 +6,14 @@ import com.study.exception.BizDuplicateKeyException;
 import com.study.exception.BizNotEffectedException;
 import com.study.exception.BizNotFoundException;
 import com.study.exception.BizPasswordNotMatchedException;
+import com.study.exception.DaoException;
 import com.study.free.vo.FreeBoardVO;
 
 public interface IFreeBoardService {
 	
 	public List<FreeBoardVO> getBoardList();
   public FreeBoardVO getBoard(int boNo) throws BizNotFoundException;	
-  public void registBoard(FreeBoardVO board);	
+  public void registBoard(FreeBoardVO board) throws DaoException;	
   public void modifyBoard(FreeBoardVO board) throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException;	
   public void removeBoard(FreeBoardVO board) throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException; 	
   public void increaseHit(int boNo);   

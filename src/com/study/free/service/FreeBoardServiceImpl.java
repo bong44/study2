@@ -9,6 +9,7 @@ import com.study.exception.BizDuplicateKeyException;
 import com.study.exception.BizNotEffectedException;
 import com.study.exception.BizNotFoundException;
 import com.study.exception.BizPasswordNotMatchedException;
+import com.study.exception.DaoDuplicateKeyException;
 import com.study.exception.DaoException;
 import com.study.free.dao.FreeBoardDaoOracle;
 import com.study.free.dao.IFreeBoardDao;
@@ -51,9 +52,16 @@ public class FreeBoardServiceImpl implements IFreeBoardService{
 	}
 
 	@Override
-	public void registBoard(FreeBoardVO board) {
-		// TODO Auto-generated method stub
-		
+	public void registBoard(FreeBoardVO board) throws DaoException{
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			boardDao.insertBoard(conn, board);
+			} catch (SQLException e) {
+			throw new DaoException(e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override

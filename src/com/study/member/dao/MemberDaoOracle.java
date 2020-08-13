@@ -197,7 +197,7 @@ public class MemberDaoOracle implements IMemberDao{
 			sb.append(" FROM member, comm_code b, comm_code c             						         ");
 			sb.append(" WHERE mem_job = b.comm_cd                       						         ");
 			sb.append(" AND mem_job = c.comm_cd                        						        	  ");
-			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			System.out.println(sb.toString().replaceAll("\\s{2,}", " ")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
 			rs = pstmt.executeQuery();
 			MemberVO member = null;

@@ -26,55 +26,43 @@
 			<tbody>
 				<tr>
 					<th>글번호</th>
-					<td>17</td>
+					<td>${free.boNo}</td>
 				</tr>
 				<tr>
 					<th>글제목</th>
-					<td>김광석의 일어나 가사입니다.</td>
+					<td>${free.boTitle}</td>
 				</tr>
 				<tr>
 					<th>글분류</th>
-					<td>사는 이야기</td>
+					<td>${free.boCategoryNm}</td>
 				</tr>
 				<tr>
 					<th>작성자명</th>
-					<td>말자엄마</td>
+					<td>${free.boWriter}</td>
 				</tr>
 				<!-- 비밀번호는 보여주지 않음  -->
 				<tr>
 					<th>내용</th>
-					<td><pre>일어나 - 김광석 
-검은 밤의 가운데 서 있어
-한 치 앞도 보이질 않아
-어디로 가야 하나 어디에 있을까
-둘러 봐도 소용없었지
-
-인생이란 강물 위를 끝없이
-부초처럼 떠다니다가
-어느 고요한 호숫가에 닿으면 물과 함께 썩어가겠지
-
-일어나 일어나 다시 한번 해보는 거야
-일어나 일어나 봄의 새싹들처럼
-</pre>
+					<td><pre>${free.boContent}</pre>
 					</td>
 				</tr>
 				<tr>
 					<th>등록자 IP</th>
-					<td>192.168.20.45</td>
+					<td>${free.boIp}</td>
 				</tr>
 				<tr>
 					<th>조회수</th>
-					<td>25</td>
+					<td>${free.boHit}</td>
 				</tr>
 				<tr>
 					<th>등록일자</th>
-					<td>2020.08.12 15:25</td>
+					<td>${free.boRegDate}</td>
 				</tr>
 				<tr>
 					<th>삭제여부</th>
-					<td>N</td>
+					<td>${free.boDelYn}</td>
 				</tr>
-				<tr>
+				<tr>	
 					<td colspan="2">
 					  <div class="pull-left">
 							<a href="freeList.jsp" class="btn btn-default btn-sm"> 

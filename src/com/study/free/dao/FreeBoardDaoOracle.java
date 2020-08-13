@@ -119,69 +119,53 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 
 	@Override
 	public int insertBoard(Connection conn, FreeBoardVO board) {
-	//	PreparedStatement pstmt = null;
-	//	ResultSet rs = null;
-	//	StringBuffer sb = new StringBuffer();
-	//	List<MemberVO> list = new ArrayList<MemberVO>();
-	//	
-	//	try {
-	//		sb.append(" INSERT INTO     				    ");
-	//	    sb.append(" free_board ( 					    ");
-	//	    sb.append("     bo_no 							");
-	//	    sb.append("     , bo_title 					    ");
-	//	    sb.append("     , bo_category 					 ");
-	//	    sb.append("     , bo_writer 					 ");
-	//	    sb.append("     , bo_pass 					    ");
-	//	    sb.append("     , bo_content 				    ");
-	//	    sb.append("     , bo_ip 					    ");
-	//	    sb.append("     , bo_hit 		  			    ");
-	//		sb.append("     , bo_reg_date        		    ");
-	//		sb.append("     , bo_mod_date      	     	 ");
-	//		sb.append("     , bo_del_yn     				  ");
-	//		sb.append(" ) VALUES (     						  ");
-	//		sb.append("     seq_free_board.nextval     	  ");
-	//		sb.append("     , ?         				  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , sysdate     					  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append("     , ?     						  	  ");
-	//		sb.append(" )     						     	  ");
-	//		System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
-	//		pstmt = conn.prepareStatement(sb.toString());
-	//		rs = pstmt.executeQuery();
-	//		MemberVO member = null;
-	//		while(rs.next()) {
-	//			member = new MemberVO(); //하나하나 값에 모두 다른 주소값을 줌
-	//			member.setMemId(rs.getString("mem_id"));
-	//			member.setMemName(rs.getString("mem_name"));
-	//			member.setMemPass(rs.getString("mem_pass"));
-	//			member.setMemBir(rs.getString("mem_bir"));
-	//			member.setMemZip(rs.getString("mem_zip"));
-	//			member.setMemAdd1(rs.getString("mem_add1"));
-	//			member.setMemAdd2(rs.getString("mem_add2"));
-	//			member.setMemHp(rs.getString("mem_hp"));
-	//			member.setMemJob(rs.getString("mem_job"));
-	//			member.setMemJobNm(rs.getString("mem_job_nm"));
-	//			member.setMemLike(rs.getString("mem_like"));
-	//			member.setMemLikeNm(rs.getString("mem_like_nm"));
-	//			member.setMemMileage(rs.getInt("mem_mileage"));
-	//			member.setMemDelete(rs.getString("mem_delete"));
-	//			list.add(member);
-	//		} //while
-	//		
-	//		return list;
-	//	} catch (SQLException e) {
-	//		throw new DaoException(e.getMessage(), e);
-	//	}finally {
-	//		if(rs != null)try{rs.close();}catch(SQLException e){e.printStackTrace();}
-	//		if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
-	//	}
-		return 0;
+		PreparedStatement pstmt = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append(" INSERT INTO     				    ");
+		    sb.append(" free_board ( 					    ");
+		    sb.append("     bo_no 							");
+		    sb.append("     , bo_title 					    ");
+		    sb.append("     , bo_category 					 ");
+		    sb.append("     , bo_writer 					 ");
+		    sb.append("     , bo_pass 					    ");
+		    sb.append("     , bo_content 				    ");
+		    sb.append("     , bo_ip 					    ");
+		    sb.append("     , bo_hit 		  			    ");
+			sb.append("     , bo_reg_date        		    ");
+			sb.append("     , bo_mod_date      	     	 ");
+			sb.append("     , bo_del_yn     				  ");
+			sb.append(" ) VALUES (     						  ");
+			sb.append("     seq_free_board.nextval     	  ");
+			sb.append("     , ?         				  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , sysdate     					  ");
+			sb.append("     , ?     						  	  ");
+			sb.append("     , ?     						  	  ");
+			sb.append(" )     						     	     ");
+			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, board.getBoTitle());
+			pstmt.setString(2, board.getBoCategory());
+			pstmt.setString(3, board.getBoWriter());
+			pstmt.setString(4, board.getBoPass());
+			pstmt.setString(5, board.getBoContent());
+			pstmt.setString(6, board.getBoIp());
+			pstmt.setInt(7, board.getBoHit());
+			pstmt.setString(8, board.getBoModDate());
+			pstmt.setString(9, board.getBoDelYn());
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
