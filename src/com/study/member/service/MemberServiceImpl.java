@@ -59,7 +59,22 @@ public class MemberServiceImpl implements IMemberService {
 
 	@Override
 	public void removeMember(MemberVO member) throws BizNotEffectedException, BizNotFoundException {
-		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			MemberVO vo = memberDao.getMember(conn, member.getMemId());
+			if (vo == null) {
+				throw new BizNotFoundException("["+member.getMemId()+"] 조회 실패");
+			}
+			int cnt = memberDao.deleteMember(conn, member);
+			if (cnt < 1) {
+				throw new BizNotEffectedException("["+member.getMemId()+"] 수정 실패");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("조회시", e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 		
 	}
 

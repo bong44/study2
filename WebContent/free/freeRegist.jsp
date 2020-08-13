@@ -24,6 +24,10 @@
 	<jsp:setProperty property="*" name="free"/>		
 <%
 IFreeBoardService boardService = new FreeBoardServiceImpl();
+free.setBoIp(request.getRemoteAddr());
+free.setBoHit(0);
+free.setBoDelYn("N");
+
 try{
 	boardService.registBoard(free);
 		%>

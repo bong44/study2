@@ -34,6 +34,8 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 			sb.append("     , bo_del_yn					      			   ");
 			sb.append(" FROM free_board , comm_code b		        	  ");
 			sb.append(" where bo_category = b.comm_cd 			     ");
+			sb.append("  and bo_del_yn = 'N'			               ");
+			sb.append("  order by bo_no 			                  ");
 			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
 			rs = pstmt.executeQuery();
@@ -44,7 +46,7 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 				free.setBoTitle(rs.getString("bo_title"));
 				free.setBoCategory(rs.getString("bo_category"));
 				free.setBoCategoryNm(rs.getString("bo_category_nm"));
-				free.setBoWriter(rs.getString("bo_category_nm"));
+				free.setBoWriter(rs.getString("bo_writer"));
 				free.setBoPass(rs.getString("bo_pass"));
 				free.setBoIp(rs.getString("bo_ip"));
 				free.setBoHit(rs.getInt("bo_hit"));
@@ -85,6 +87,7 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 			sb.append("     , bo_content				      			   ");
 			sb.append(" FROM free_board , comm_code b		        	  ");
 			sb.append(" where bo_category = b.comm_cd 			     ");
+			sb.append("  and bo_del_yn = 'N'			               ");
 			sb.append(" and bo_no = ? 			                      ");
 			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
@@ -98,7 +101,7 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 				free.setBoTitle(rs.getString("bo_title"));
 				free.setBoCategory(rs.getString("bo_category"));
 				free.setBoCategoryNm(rs.getString("bo_category_nm"));
-				free.setBoWriter(rs.getString("bo_category_nm"));
+				free.setBoWriter(rs.getString("bo_writer"));
 				free.setBoPass(rs.getString("bo_pass"));
 				free.setBoIp(rs.getString("bo_ip"));
 				free.setBoHit(rs.getInt("bo_hit"));
@@ -170,20 +173,74 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 
 	@Override
 	public int updateBoard(Connection conn, FreeBoardVO board) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append(" 	UPDATE free_board SET		     ");
+		    sb.append(" 	      bo_title = ?		         ");
+		    sb.append(" 	    , bo_category = ?		     ");
+		    sb.append(" 	    , bo_writer = ?		        ");
+		    sb.append(" 	    , bo_content = ?			    ");
+		    sb.append(" 	    , bo_mod_date = sysdate		 ");
+		    sb.append(" 	WHERE		                       ");
+		    sb.append(" 	    bo_no = ?		           ");
+			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, board.getBoTitle());
+			pstmt.setString(2, board.getBoCategory());
+			pstmt.setString(3, board.getBoWriter());
+			pstmt.setString(4, board.getBoContent());
+			pstmt.setInt(5, board.getBoNo());
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
 	public int deleteBoard(Connection conn, FreeBoardVO board) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append(" 	UPDATE free_board SET		     ");
+		    sb.append(" 	      bo_del_yn = 'Y'	         ");
+		    sb.append(" 	WHERE		                       ");
+		    sb.append(" 	    bo_no = ?		                ");
+			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, board.getBoNo());
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
 	public int increaseHit(Connection conn, int boNo) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append(" 	UPDATE free_board SET		     ");
+		    sb.append(" 	      bo_hit = bo_hit + 1		         ");
+		    sb.append(" 	WHERE		                       ");
+		    sb.append(" 	    bo_no = ?		           ");
+			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, boNo);
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		
 	}
 
 }

@@ -24,7 +24,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">게시판 <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">자유게시판</a></li>
+                <li><a href="<%=request.getContextPath()%>/free/freeList.jsp">자유게시판</a></li>
                 <li><a href="#">자료실</a></li>
                 <li><a href="#">공지사항</a></li>
                 <li class="divider"></li>

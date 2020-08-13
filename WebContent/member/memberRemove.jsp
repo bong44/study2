@@ -22,20 +22,27 @@
 <%
 IMemberService memberService = new MemberServiceImpl();
 try{
-	memberService.registMember(member);
+	memberService.removeMember(member);
 		%>
 			<div class="alert alert-warning">
-				<h4>회원가입 완료.</h4>
-				정상적으로 회원가입이 완료되었습니다.
+				<h4>탈퇴 완료.</h4>
+				정상적으로 탈퇴 완료되었습니다.
 			</div>
 		<%
-}catch(BizDuplicateKeyException ex){
-		%>
-			<div class="alert alert-warning">
-				<h4>해당 아이디는 사용중 입니다.</h4>
-				새로운 아이디를 입력해주세요!
-			</div>
-		<%
+}catch(BizNotEffectedException ex){
+	%>
+	<div class="alert alert-warning">
+		<h4>수정이 안 되었습니다</h4>
+		아이디나 비밀번호를 확인해 주세요!
+	</div>
+<%
+}catch(BizNotFoundException ex){
+%>
+	<div class="alert alert-warning">
+		<h4>회원이 존재하지 않습니다</h4>
+		아이디나 비밀번호를 확인해 주세요! 
+	</div>
+<%
 }
 
 %>

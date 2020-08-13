@@ -14,6 +14,7 @@
 	IFreeBoardService freeBoardService = new FreeBoardServiceImpl();
 	FreeBoardVO free = freeBoardService.getBoard(Integer.parseInt(request.getParameter("boNo")));
 	request.setAttribute("free", free);
+	freeBoardService.increaseHit(Integer.parseInt(request.getParameter("boNo")));
 %>
 </head>
 <body>
@@ -71,7 +72,7 @@
 							</a>
 						</div>
 						<div class="pull-right">
-							<a href="freeEdit.jsp?boNo=17" class="btn btn-success btn-sm"> 
+							<a href="freeEdit.jsp?boNo=${free.boNo}" class="btn btn-success btn-sm"> 
 								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 								&nbsp;&nbsp;수정
 						  </a>

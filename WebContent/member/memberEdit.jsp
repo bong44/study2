@@ -122,8 +122,8 @@
 			<tr>
 				<td>탈퇴여부</td>
 				<td>
-					<input type="radio" name="memDelete" value="Y" ${"Y" eq mem.memDelete ?"checked='checked'":""  }>Y
-					<input type="radio" name="memDelete" value="N" ${!"N" eq mem.memDelete ?"checked='checked'":"" }>N
+					<input type="radio" name="memDelete" value="Y" ${"Y" eq mem.memDelete ?"checked='checked'":"" }>Y
+					<input type="radio" name="memDelete" value="N" ${"N" eq mem.memDelete ?"checked='checked'":"" }>N
 					
 				</td>
 			</tr>			

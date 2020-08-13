@@ -67,21 +67,62 @@ public class FreeBoardServiceImpl implements IFreeBoardService{
 	@Override
 	public void modifyBoard(FreeBoardVO board)
 			throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException {
-		// TODO Auto-generated method stub
-		
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			FreeBoardVO vo = boardDao.getBoard(conn, board.getBoNo());
+			if (vo == null) {
+				throw new BizNotFoundException("["+board.getBoNo()+"] 조회 실패");
+			}
+			if (!vo.getBoPass().equals(board.getBoPass())) {
+				throw new BizPasswordNotMatchedException("["+board.getBoNo()+"] 비밀번호 불일치");
+			}
+			int cnt = boardDao.updateBoard(conn, board);
+			if (cnt < 1) {
+				throw new BizNotEffectedException("["+board.getBoNo()+"] 수정 실패");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("조회시", e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
 	public void removeBoard(FreeBoardVO board)
 			throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException {
-		// TODO Auto-generated method stub
-		
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			FreeBoardVO vo = boardDao.getBoard(conn, board.getBoNo());
+			if (vo == null) {
+				throw new BizNotFoundException("["+board.getBoNo()+"] 조회 실패");
+			}
+			if (!vo.getBoPass().equals(board.getBoPass())) {
+				throw new BizPasswordNotMatchedException("["+board.getBoNo()+"] 비밀번호 불일치");
+			}
+			int cnt = boardDao.deleteBoard(conn, board);
+			if (cnt < 1) {
+				throw new BizNotEffectedException("["+board.getBoNo()+"] 수정 실패");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("조회시", e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
 	public void increaseHit(int boNo) {
-		// TODO Auto-generated method stub
-		
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
+			boardDao.increaseHit(conn, boNo);
+			} catch (SQLException e) {
+			throw new DaoException(e);
+		}finally {
+			if(conn != null)try{conn.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 	
 }

@@ -41,7 +41,7 @@ public class MemberDaoOracle implements IMemberDao{
 			sb.append("	         , ?   , ?     ,   ?					");
 			sb.append("	         , ?   , ?     ,   ?					");
 			sb.append("	         , ?   , ?      ,  0					");
-			sb.append("	         , null 	 										");
+			sb.append("	         , 'N' 	 										");
 			sb.append("	     )														");
 			System.out.println(sb.toString().replaceAll("\\s{2,}", " ")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
@@ -117,9 +117,23 @@ public class MemberDaoOracle implements IMemberDao{
 
 	@Override
 	public int deleteMember(Connection conn, MemberVO member) {
-		// TODO Auto-generated method stub
+		PreparedStatement pstmt = null;
+		StringBuffer sb = new StringBuffer();
 		
-		return 0;
+		try {
+			sb.append(" 	UPDATE member SET		     ");
+		    sb.append(" 	      mem_delete = 'Y'	         ");
+		    sb.append(" 	WHERE		                       ");
+		    sb.append(" 	    mem_id = ?		                ");
+			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, member.getMemId());
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	@Override
@@ -142,6 +156,7 @@ public class MemberDaoOracle implements IMemberDao{
 		    sb.append(", mem_delete                          										       ");
 			sb.append(" FROM member                          									         ");
 			sb.append(" WHERE mem_id = ?     																");
+			sb.append(" AND mem_delete = 'N'     																");
 			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
 			//bind 변수 설정(파라미터 변수)
@@ -197,6 +212,7 @@ public class MemberDaoOracle implements IMemberDao{
 			sb.append(" FROM member, comm_code b, comm_code c             						         ");
 			sb.append(" WHERE mem_job = b.comm_cd                       						         ");
 			sb.append(" AND mem_job = c.comm_cd                        						        	  ");
+			sb.append(" AND mem_delete = 'N'     																");
 			System.out.println(sb.toString().replaceAll("\\s{2,}", " ")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
 			rs = pstmt.executeQuery();

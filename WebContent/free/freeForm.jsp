@@ -1,3 +1,6 @@
+<%@page import="com.study.code.vo.CodeVO"%>
+<%@page import="com.study.code.service.ICommonCodeService"%>
+<%@page import="com.study.code.service.CommonCodeServiceImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -16,6 +19,11 @@
 <body>
 <%@include file="/WEB-INF/inc/top.jsp" %>
 <div class="container">
+ <%
+ 	ICommonCodeService codeService = new CommonCodeServiceImpl();
+ 	List<CodeVO> bList = codeService.getCodeListByParent("BC00");
+ 	request.setAttribute("bList", bList);
+ %>
 	<div class="page-header">
 		<h3>글 등록</h3>
 	</div>
@@ -36,7 +44,7 @@
 		</tr>
 		<tr>
 			<th>비밀번호</th>
-			<td><input type="password" name="boPass" value="" class="form-control input-sm">
+			<td><input type="password" name="boPass" value="" class="form-control input-sm" required="required" pattern="\w{4,}" title="알파벳과 숫자로 4글자 이상 입력">
 				<span >수정 또는 삭제시에 필요합니다.</span>
 			</td>
 		</tr>
@@ -45,9 +53,9 @@
 			<td>
 				<select name="boCategory" class="form-control input-sm" required="required">
 					<option value="">-- 선택하세요--</option>					
-					<option value="BC01">살아가는 이야기</option>
-					<option value="BC02">프로그램 언어</option>
-					<option value="BC03">웹</option>
+					<c:forEach items="${bList}" var="b">
+						<option value="${b.commCd}">${b.commNm}</option>
+					</c:forEach>	
 				</select>	
 			</td>
 		</tr>
