@@ -7,19 +7,70 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.study.exception.DaoException;
+import com.study.free.vo.FreeBoardSearchVO;
 import com.study.free.vo.FreeBoardVO;
 
 public class FreeBoardDaoOracle implements IFreeBoardDao{
+	
+	@Override
+	public int getBoardCount(Connection conn, FreeBoardSearchVO searchVO) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append(" SELECT count(*)				  ");
+			sb.append(" FROM free_board        	  ");
+			sb.append(" WHERE 1 = 1        	  		  ");
+			//검색처리
+			if (StringUtils.isNotEmpty(searchVO.getSearchCategory())) {
+				sb.append(" AND bo_category = ?        	  		  ");
+			}
+			if (StringUtils.isNotEmpty(searchVO.getSearchWord())) {
+				switch (searchVO.getSearchType()) {
+				case "T": sb.append(" AND bo_title LIKE '%' || ? || '%'  "); break;
+				case "W": sb.append(" AND bo_writer LIKE '%' || ? || '%'  "); break;
+				case "C": sb.append(" AND bo_content LIKE '%' || ? || '%'  "); break;
+				}
+			}
+			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
+			pstmt = conn.prepareStatement(sb.toString());
+			//bind 변수 설정(파라미터 변수)
+			int i = 1;
+			if (StringUtils.isNotEmpty(searchVO.getSearchCategory())) {
+				pstmt.setString(i++, searchVO.getSearchCategory());
+			}
+			if (StringUtils.isNotEmpty(searchVO.getSearchWord())) {
+				pstmt.setString(i++, searchVO.getSearchWord());
+			}
+			rs = pstmt.executeQuery();
+			int cnt = 0;
+			while(rs.next()) {
+				cnt = rs.getInt(1);
+			} //while
+			return cnt;
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage(), e);
+		}finally {
+			if(rs != null)try{rs.close();}catch(SQLException e){e.printStackTrace();}
+			if(pstmt != null)try{pstmt.close();}catch(SQLException e){e.printStackTrace();}
+		}
+	}
 
 	@Override
-	public List<FreeBoardVO> getBoardList(Connection conn) {
+	public List<FreeBoardVO> getBoardList(Connection conn, FreeBoardSearchVO searchVO) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		StringBuffer sb = new StringBuffer();
 		List<FreeBoardVO> list = new ArrayList<FreeBoardVO>();
 		
 		try {
+			sb.append("select *                                                   "); 
+		    sb.append("from(select rownum rnum , a.*                              "); 
+		    sb.append("    from(                                                  "); 
 			sb.append(" SELECT											  ");
 		    sb.append("     bo_no					     				  ");
 		    sb.append("     , bo_title								      ");
@@ -34,10 +85,36 @@ public class FreeBoardDaoOracle implements IFreeBoardDao{
 			sb.append("     , bo_del_yn					      			   ");
 			sb.append(" FROM free_board , comm_code b		        	  ");
 			sb.append(" where bo_category = b.comm_cd 			     ");
+			//검색처리
+			if (StringUtils.isNotEmpty(searchVO.getSearchCategory())) {
+				sb.append(" AND bo_category = ?        	  		  ");
+			}
+			if (StringUtils.isNotEmpty(searchVO.getSearchWord())) {
+				switch (searchVO.getSearchType()) {
+				case "T": sb.append(" AND bo_title LIKE '%' || ? || '%'  "); break;
+				case "W": sb.append(" AND bo_writer LIKE '%' || ? || '%'  "); break;
+				case "C": sb.append(" AND bo_content LIKE '%' || ? || '%'  "); break;
+				}
+			}
 			sb.append("  and bo_del_yn = 'N'			               ");
 			sb.append("  order by bo_no 			                  ");
+		    sb.append("    				) a                             "); 
+		    sb.append("    			where rownum <= ?) b                "); 
+		    sb.append("			where rnum between ? and ?              "); 
 			System.out.println(sb.toString().replaceAll("\\s{2,}", "")); // \s = 공백이 2, = 2개이상인
 			pstmt = conn.prepareStatement(sb.toString());
+			int i = 1;
+			//바인드변수 처리
+			if (StringUtils.isNotEmpty(searchVO.getSearchCategory())) {
+				pstmt.setString(i++, searchVO.getSearchCategory());
+			}
+			if (StringUtils.isNotEmpty(searchVO.getSearchWord())) {
+				pstmt.setString(i++, searchVO.getSearchWord());
+			}
+			
+			pstmt.setInt(i++, searchVO.getLastRow());
+			pstmt.setInt(i++, searchVO.getFirstRow());
+			pstmt.setInt(i++, searchVO.getLastRow());
 			rs = pstmt.executeQuery();
 			FreeBoardVO free = null;
 			while(rs.next()) {

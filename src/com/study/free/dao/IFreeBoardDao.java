@@ -4,16 +4,27 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.study.exception.DaoException;
+import com.study.free.vo.FreeBoardSearchVO;
 import com.study.free.vo.FreeBoardVO;
 
 public interface IFreeBoardDao {
 	
 	/**
+	 * <b>목록건수 리턴</b> 
+	 * @param conn
+	 * @param searchVO TODO
+	 * @return int;
+	 */
+	
+	public int getBoardCount(Connection conn, FreeBoardSearchVO searchVO) ;
+	
+	/**
 	 * <b>자유게시판 목록 반환</b> 
 	 * @param conn
+	 * @param searchVO TODO
 	 * @return List &lt;FreeBoardVO&gt;
 	 */
-	public List<FreeBoardVO> getBoardList(Connection conn) ;
+	public List<FreeBoardVO> getBoardList(Connection conn, FreeBoardSearchVO searchVO) ;
 	
 	/**
 	 * <b>글번호에 해당하는 게시물 반환</b>

@@ -7,11 +7,12 @@ import com.study.exception.BizNotEffectedException;
 import com.study.exception.BizNotFoundException;
 import com.study.exception.BizPasswordNotMatchedException;
 import com.study.exception.DaoException;
+import com.study.free.vo.FreeBoardSearchVO;
 import com.study.free.vo.FreeBoardVO;
 
 public interface IFreeBoardService {
 	
-	public List<FreeBoardVO> getBoardList();
+	public List<FreeBoardVO> getBoardList(FreeBoardSearchVO searchVO);
   public FreeBoardVO getBoard(int boNo) throws BizNotFoundException;	
   public void registBoard(FreeBoardVO board) throws DaoException;	
   public void modifyBoard(FreeBoardVO board) throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException;	

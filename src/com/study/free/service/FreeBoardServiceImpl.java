@@ -13,6 +13,7 @@ import com.study.exception.DaoDuplicateKeyException;
 import com.study.exception.DaoException;
 import com.study.free.dao.FreeBoardDaoOracle;
 import com.study.free.dao.IFreeBoardDao;
+import com.study.free.vo.FreeBoardSearchVO;
 import com.study.free.vo.FreeBoardVO;
 import com.study.member.vo.MemberVO;
 
@@ -21,11 +22,16 @@ public class FreeBoardServiceImpl implements IFreeBoardService{
 	private IFreeBoardDao boardDao = new FreeBoardDaoOracle(); 
 	
 	@Override
-	public List<FreeBoardVO> getBoardList() {
+	public List<FreeBoardVO> getBoardList(FreeBoardSearchVO searchVO) {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
-			List<FreeBoardVO> list = boardDao.getBoardList(conn);
+			//건수를 구해서 searchVO설정 -> searchVO.pageSetting()
+			int cnt = boardDao.getBoardCount(conn, searchVO);
+			searchVO.setTotalRowCount(cnt);
+			searchVO.pageSetting();
+			
+			List<FreeBoardVO> list = boardDao.getBoardList(conn, searchVO);
 			return list;
 		} catch (SQLException e) {
 			throw new DaoException("조회시", e);
